@@ -1,0 +1,91 @@
+# MeetingAssassin Google Calendar Integration Requirements
+
+# Core FastAPI and async support
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+httpx>=0.25.0
+asyncio-mqtt>=0.12.0
+
+# Database and ORM
+sqlalchemy[asyncio]>=2.0.0
+asyncpg>=0.29.0
+alembic>=1.12.0
+
+# Authentication and security
+python-jose[cryptography]>=3.3.0
+python-multipart>=0.0.6
+bcrypt>=4.0.1
+passlib[bcrypt]>=1.7.4
+
+# Google Calendar API and OAuth
+google-auth>=2.23.0
+google-auth-oauthlib>=1.1.0
+google-auth-httplib2>=0.2.0
+google-api-python-client>=2.108.0
+
+# Data validation and serialization
+pydantic[email]>=2.5.0
+pydantic-settings>=2.1.0
+
+# HTTP client for API calls
+httpx>=0.25.0
+aiohttp>=3.9.0
+
+# Date and time handling
+python-dateutil>=2.8.2
+pytz>=2023.3
+
+# Data processing and analytics
+numpy>=1.25.0
+pandas>=2.1.0
+scipy>=1.11.0
+
+# Machine learning for meeting intelligence
+scikit-learn>=1.3.0
+
+# Background job processing
+celery[redis]>=5.3.0
+redis>=5.0.0
+
+# WebSocket support for real-time updates
+python-socketio>=5.10.0
+websockets>=12.0
+
+# JSON handling and data structures
+orjson>=3.9.0
+
+# Environment and configuration
+python-dotenv>=1.0.0
+
+# Logging and monitoring
+structlog>=23.2.0
+prometheus-client>=0.19.0
+
+# Development and testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.12.0
+httpx>=0.25.0  # For test client
+
+# Code quality
+black>=23.0.0
+isort>=5.12.0
+flake8>=6.1.0
+mypy>=1.7.0
+
+# Documentation
+mkdocs>=1.5.0
+mkdocs-material>=9.4.0
+
+# Production deployment
+gunicorn>=21.2.0
+supervisor>=4.2.0
+
+# Optional: For enhanced calendar parsing and NLP
+nltk>=3.8.0
+spacy>=3.7.0
+
+# Optional: For advanced analytics and visualization
+matplotlib>=3.8.0
+seaborn>=0.13.0
+plotly>=5.17.0

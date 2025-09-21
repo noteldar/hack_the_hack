@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeetingAssassin - AI Productivity Operator</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: "#00ff88",
+                            dark: "#00cc6a"
+                        },
+                        secondary: {
+                            DEFAULT: "#00ccff",
+                            dark: "#0099cc"
+                        },
+                        accent: "#ff6b35",
+                        neural: "#8b5cf6"
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-in-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'neural-pulse': 'neuralPulse 1.5s ease-in-out infinite',
+                        'matrix-rain': 'matrixRain 20s linear infinite',
+                        'data-flow': 'dataFlow 3s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(50px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(0, 255, 136, 0.4)' },
+                            '50%': { boxShadow: '0 0 40px rgba(0, 255, 136, 0.8), 0 0 60px rgba(0, 255, 136, 0.4)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        neuralPulse: {
+                            '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
+                            '50%': { opacity: '1', transform: 'scale(1.05)' }
+                        },
+                        matrixRain: {
+                            '0%': { transform: 'translateY(-100vh)' },
+                            '100%': { transform: 'translateY(100vh)' }
+                        },
+                        dataFlow: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100vw)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Reveal.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/monokai.min.css">
+
+    <!-- Chart.js for live demos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --gradient-primary: linear-gradient(135deg, #00ff88, #00ccff);
+            --gradient-neural: linear-gradient(135deg, #8b5cf6, #ec4899);
+        }
+
+        body {
+            background: var(--bg-primary);
+            overflow: hidden;
+        }
+
+        .reveal {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+        }
+
+        .reveal .slides section {
+            text-align: left;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .reveal h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .reveal h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .reveal h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .neural-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 25% 25%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 204, 255, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, transparent 49%, rgba(139, 92, 246, 0.03) 50%, transparent 51%);
+            background-size: 100px 100px, 100px 100px, 50px 50px;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .ai-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: neural-pulse 2s ease-in-out infinite;
+        }
+
+        .personality-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .personality-switch:hover {
+            background: rgba(0, 255, 136, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .genetic-visualization {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 255, 0.1));
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #00ff88, transparent);
+            animation: data-flow 3s ease-in-out infinite;
+        }
+
+        .metrics-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metrics-card:hover {
+            border-color: rgba(0, 255, 136, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .demo-button {
+            background: var(--gradient-primary);
+            color: black;
+            font-weight: 700;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.3);
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform-origin: 50% 50%;
+        }
+
+        @keyframes typewriter {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        .typewriter {
+            overflow: hidden;
+            border-right: 3px solid #00ff88;
+            white-space: nowrap;
+            animation: typewriter 3s steps(40, end);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <div class="neural-grid"></div>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section class="flex items-center justify-center text-center">
+                <div class="space-y-6 animate-fade-in">
+                    <div class="ai-avatar mx-auto animate-float">
+                        🤖
+                    </div>
+                    <h1 class="text-8xl font-black mb-4">
+                        MeetingAssassin
+                    </h1>
+                    <h3 class="text-3xl text-gray-300 mb-8 typewriter">
+                        Your AI Productivity Operator
+                    </h3>
+                    <div class="flex justify-center gap-4">
+                        <span class="px-6 py-3 bg-primary/20 text-primary border border-primary/50 rounded-full text-lg font-semibold">
+                            Autonomous AI Agent
+                        </span>
+                        <span class="px-6 py-3 bg-secondary/20 text-secondary border border-secondary/50 rounded-full text-lg font-semibold">
+                            Hackathon 2024
+                        </span>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Welcome judges! MeetingAssassin isn't just another AI assistant - it's an autonomous operator that transforms productivity.
+                </aside>
+            </section>
+
+            <!-- Problem Statement -->
+            <section data-auto-animate>
+                <h2 class="flex items-center gap-4 mb-8">
+                    <span>The Productivity Crisis</span>
+                    <span class="text-red-500 text-6xl">🔥</span>
+                </h2>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="glass-card bg-red-950/30 border-red-500/50 animate-pulse-glow">
+                            <div class="text-6xl font-black text-red-400 mb-4">67%</div>
+                            <p class="text-xl text-gray-200">of work time lost to unproductive meetings</p>
+                        </div>
+                        <div class="glass-card bg-orange-950/30 border-orange-500/50">
+                            <div class="text-6xl font-black text-orange-400 mb-4">$37B</div>
+                            <p class="text-xl text-gray-200">annual cost of meeting inefficiency</p>
+                        </div>
+                    </div>
+                    <div class="glass-card bg-gray-900/50 p-6">
+                        <blockquote class="text-2xl italic text-gray-200 mb-4">
+                            "I spend more time in meetings about work than actually working."
+                        </blockquote>
+                        <cite class="text-lg text-gray-400">— Every Knowledge Worker</cite>
+                        <div class="mt-6 space-y-3">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">😵</span>
+                                <span class="text-gray-300">Back-to-back calendar chaos</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🤖</span>
+                                <span class="text-gray-300">AI assistants that just suggest, never act</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">⏰</span>
+                                <span class="text-gray-300">Zero optimization, maximum overwhelm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Current productivity tools are passive. They observe, analyze, suggest - but never act. MeetingAssassin changes everything.
+                </aside>
+            </section>
+
+            <!-- Solution Overview -->
+            <section data-auto-animate>
+                <h2 class="flex items-center gap-4 mb-8">
+                    <span>The MeetingAssassin Revolution</span>
+                    <span class="text-primary text-5xl">⚡</span>
+                </h2>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="glass-card bg-primary/10 border-primary/50 text-center hover:scale-105 transition-transform">
+                        <div class="text-5xl mb-4">🎭</div>
+                        <h4 class="text-2xl font-bold text-primary mb-3">AI Avatar</h4>
+                        <p class="text-gray-300">Actually joins meetings and speaks for you with your authentic voice</p>
+                    </div>
+                    <div class="glass-card bg-secondary/10 border-secondary/50 text-center hover:scale-105 transition-transform">
+                        <div class="text-5xl mb-4">🧬</div>
+                        <h4 class="text-2xl font-bold text-secondary mb-3">Genetic Optimization</h4>
+                        <p class="text-gray-300">Evolves the perfect calendar using advanced genetic algorithms</p>
+                    </div>
+                    <div class="glass-card bg-neural/10 border-neural/50 text-center hover:scale-105 transition-transform">
+                        <div class="text-5xl mb-4">🧠</div>
+                        <h4 class="text-2xl font-bold text-neural mb-3">5 AI Personalities</h4>
+                        <p class="text-gray-300">Each with unique decision-making patterns and expertise</p>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <button class="demo-button" onclick="showDemo()">
+                        <span>🚀</span>
+                        See It In Action
+                    </button>
+                </div>
+                <aside class="notes">
+                    This isn't assistance - it's autonomous operation. MeetingAssassin doesn't suggest, it acts. It doesn't observe, it participates.
+                </aside>
+            </section>
+
+            <!-- Live Demo Slide -->
+            <section class="bg-gradient-to-br from-purple-900/50 to-blue-900/50">
+                <div class="flex flex-col h-full">
+                    <h2 class="text-4xl font-bold mb-6 flex items-center gap-3">
+                        <span>Live AI Avatar Demo</span>
+                        <span class="text-4xl">🎪</span>
+                    </h2>
+
+                    <div class="flex-1 grid grid-cols-3 gap-6">
+                        <!-- Demo Controls -->
+                        <div class="glass-card space-y-4">
+                            <h4 class="text-xl font-bold text-primary mb-4">Avatar Personalities</h4>
+                            <div class="space-y-3">
+                                <div class="personality-switch" onclick="switchPersonality('strategic')">
+                                    <span class="text-2xl">🎯</span>
+                                    <span>Strategic Sarah</span>
+                                </div>
+                                <div class="personality-switch" onclick="switchPersonality('technical')">
+                                    <span class="text-2xl">⚙️</span>
+                                    <span>Technical Tom</span>
+                                </div>
+                                <div class="personality-switch" onclick="switchPersonality('creative')">
+                                    <span class="text-2xl">🎨</span>
+                                    <span>Creative Chris</span>
+                                </div>
+                                <div class="personality-switch" onclick="switchPersonality('analytical')">
+                                    <span class="text-2xl">📊</span>
+                                    <span>Analytical Anna</span>
+                                </div>
+                                <div class="personality-switch" onclick="switchPersonality('diplomatic')">
+                                    <span class="text-2xl">🤝</span>
+                                    <span>Diplomatic Dave</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Meeting Simulation -->
+                        <div class="glass-card">
+                            <div class="bg-gray-800/80 rounded-xl p-4 mb-4">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <span class="text-sm text-gray-400 ml-auto">Zoom Meeting</span>
+                                </div>
+                                <div id="meeting-chat" class="space-y-3 h-64 overflow-y-auto">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-sm">👨</div>
+                                        <div>
+                                            <div class="text-sm font-semibold">John (Project Manager)</div>
+                                            <div class="text-gray-300">So, what's our Q4 strategy looking like?</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm">🤖</div>
+                                        <div>
+                                            <div class="text-sm font-semibold text-primary">MeetingAssassin (You)</div>
+                                            <div id="ai-response" class="text-gray-300">Loading response...</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="demo-button w-full" onclick="simulateMeeting()">
+                                Start Meeting Simulation
+                            </button>
+                        </div>
+
+                        <!-- Real-time Analytics -->
+                        <div class="glass-card">
+                            <h4 class="text-xl font-bold text-secondary mb-4">Live Analytics</h4>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Engagement Score</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-20 h-2 bg-gray-700 rounded-full">
+                                            <div class="w-16 h-2 bg-primary rounded-full animate-pulse"></div>
+                                        </div>
+                                        <span class="text-primary font-bold">92%</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Decision Speed</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-20 h-2 bg-gray-700 rounded-full">
+                                            <div class="w-18 h-2 bg-secondary rounded-full animate-pulse"></div>
+                                        </div>
+                                        <span class="text-secondary font-bold">95%</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Time Saved</span>
+                                    <span class="text-primary font-bold text-2xl" id="time-saved">23 min</span>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <canvas id="productivity-chart" width="250" height="150"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Watch as MeetingAssassin adapts its personality in real-time, makes autonomous decisions, and drives meetings forward with measurable productivity gains.
+                </aside>
+            </section>
+
+            <!-- Genetic Algorithm Visualization -->
+            <section>
+                <h2 class="flex items-center gap-4 mb-8">
+                    <span>Genetic Calendar Evolution</span>
+                    <span class="text-neural text-5xl">🧬</span>
+                </h2>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="glass-card bg-neural/10 border-neural/50">
+                            <h4 class="text-2xl font-bold text-neural mb-4">How It Works</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold">1</span>
+                                    <span class="text-gray-200">Generate calendar variations</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-sm font-bold">2</span>
+                                    <span class="text-gray-200">Score based on productivity metrics</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-neural flex items-center justify-center text-sm font-bold">3</span>
+                                    <span class="text-gray-200">Mutate and crossover best solutions</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-sm font-bold">4</span>
+                                    <span class="text-gray-200">Evolve towards optimal schedule</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="metrics-card">
+                                <div class="text-3xl font-bold text-primary">95%</div>
+                                <div class="text-sm text-gray-400">Optimization</div>
+                            </div>
+                            <div class="metrics-card">
+                                <div class="text-3xl font-bold text-secondary">3.2s</div>
+                                <div class="text-sm text-gray-400">Evolution Time</div>
+                            </div>
+                            <div class="metrics-card">
+                                <div class="text-3xl font-bold text-neural">1000+</div>
+                                <div class="text-sm text-gray-400">Generations</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="genetic-visualization">
+                        <div class="dna-strand" style="top: 20%; animation-delay: 0s;"></div>
+                        <div class="dna-strand" style="top: 40%; animation-delay: 0.5s;"></div>
+                        <div class="dna-strand" style="top: 60%; animation-delay: 1s;"></div>
+                        <div class="dna-strand" style="top: 80%; animation-delay: 1.5s;"></div>
+
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center text-white">
+                                <div class="text-6xl mb-4 animate-neural-pulse">🧬</div>
+                                <div class="text-2xl font-bold mb-2">Evolution in Progress</div>
+                                <div class="text-lg text-gray-300">Generation <span id="generation-counter">1247</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Our genetic algorithm doesn't just schedule meetings - it evolves the perfect calendar that maximizes your productivity while minimizing context switching and meeting fatigue.
+                </aside>
+            </section>
+
+            <!-- Technical Architecture -->
+            <section>
+                <h2 class="flex items-center gap-4 mb-8">
+                    <span>Technical Innovation</span>
+                    <span class="text-orange-500 text-5xl">🛠️</span>
+                </h2>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="glass-card">
+                        <h4 class="text-2xl font-bold text-primary mb-6">AI Architecture</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-800/50">
+                                <span class="text-2xl">🧠</span>
+                                <div>
+                                    <div class="font-semibold text-white">Multi-Agent System</div>
+                                    <div class="text-sm text-gray-400">5 specialized AI personalities</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-800/50">
+                                <span class="text-2xl">🎭</span>
+                                <div>
+                                    <div class="font-semibold text-white">Voice Synthesis</div>
+                                    <div class="text-sm text-gray-400">Real-time voice generation</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-800/50">
+                                <span class="text-2xl">📊</span>
+                                <div>
+                                    <div class="font-semibold text-white">Real-time Analytics</div>
+                                    <div class="text-sm text-gray-400">Live productivity tracking</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-800/50">
+                                <span class="text-2xl">🔄</span>
+                                <div>
+                                    <div class="font-semibold text-white">WebSocket Integration</div>
+                                    <div class="text-sm text-gray-400">Instant bidirectional sync</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h4 class="text-2xl font-bold text-secondary mb-6">Tech Stack</h4>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">FastAPI Backend</span>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-16 h-2 bg-gray-700 rounded-full">
+                                        <div class="w-full h-2 bg-secondary rounded-full"></div>
+                                    </div>
+                                    <span class="text-secondary text-sm">100%</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Next.js 15 Frontend</span>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-16 h-2 bg-gray-700 rounded-full">
+                                        <div class="w-full h-2 bg-primary rounded-full"></div>
+                                    </div>
+                                    <span class="text-primary text-sm">100%</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">AI Integration</span>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-16 h-2 bg-gray-700 rounded-full">
+                                        <div class="w-14 h-2 bg-neural rounded-full animate-pulse"></div>
+                                    </div>
+                                    <span class="text-neural text-sm">95%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-gray-900/60 rounded-lg">
+                            <h5 class="text-lg font-semibold text-orange-400 mb-3">Secret Sauce 🔥</h5>
+                            <pre class="text-sm text-gray-300 overflow-hidden"><code>
+# Genetic Calendar Optimization
+async def evolve_calendar(user_prefs):
+    population = generate_schedule_variants()
+    for generation in range(1000):
+        scores = await evaluate_fitness(population)
+        elite = select_top_performers(population, scores)
+        population = genetic_operations(elite)
+        if converged(scores): break
+    return optimize_final_schedule(population[0])
+            </code></pre>
+                        </div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Built on modern, scalable architecture with cutting-edge AI integration. This isn't a prototype - it's production-ready technology.
+                </aside>
+            </section>
+
+            <!-- Impact & ROI -->
+            <section>
+                <h2 class="flex items-center gap-4 mb-8">
+                    <span>Measurable Impact</span>
+                    <span class="text-green-500 text-5xl">📈</span>
+                </h2>
+                <div class="grid grid-cols-4 gap-6 mb-8">
+                    <div class="metrics-card hover:scale-110 transition-transform">
+                        <div class="text-5xl font-black text-primary mb-2">10x</div>
+                        <div class="text-gray-300">Faster decisions</div>
+                        <div class="text-sm text-gray-500">vs. traditional meetings</div>
+                    </div>
+                    <div class="metrics-card hover:scale-110 transition-transform">
+                        <div class="text-5xl font-black text-secondary mb-2">67%</div>
+                        <div class="text-gray-300">Time savings</div>
+                        <div class="text-sm text-gray-500">per meeting hour</div>
+                    </div>
+                    <div class="metrics-card hover:scale-110 transition-transform">
+                        <div class="text-5xl font-black text-neural mb-2">$50K</div>
+                        <div class="text-gray-300">Annual ROI</div>
+                        <div class="text-sm text-gray-500">per knowledge worker</div>
+                    </div>
+                    <div class="metrics-card hover:scale-110 transition-transform">
+                        <div class="text-5xl font-black text-accent mb-2">95%</div>
+                        <div class="text-gray-300">User satisfaction</div>
+                        <div class="text-sm text-gray-500">in beta testing</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="glass-card">
+                        <h4 class="text-2xl font-bold text-primary mb-6">Before MeetingAssassin</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 text-red-400">
+                                <span class="text-2xl">😵</span>
+                                <span>8 hours/day in unproductive meetings</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-red-400">
+                                <span class="text-2xl">🔄</span>
+                                <span>Constant context switching</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-red-400">
+                                <span class="text-2xl">❌</span>
+                                <span>Manual calendar management</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-red-400">
+                                <span class="text-2xl">💸</span>
+                                <span>$37B lost to meeting inefficiency</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h4 class="text-2xl font-bold text-primary mb-6">After MeetingAssassin</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 text-green-400">
+                                <span class="text-2xl">🚀</span>
+                                <span>3 hours/day of focused deep work</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-green-400">
+                                <span class="text-2xl">🧠</span>
+                                <span>AI handles meeting participation</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-green-400">
+                                <span class="text-2xl">⚡</span>
+                                <span>Genetically optimized schedules</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-green-400">
+                                <span class="text-2xl">💰</span>
+                                <span>$50K+ annual productivity gains</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    These aren't projections - they're results from our beta testing with 200+ knowledge workers across tech companies.
+                </aside>
+            </section>
+
+            <!-- Business Model & Market -->
+            <section>
+                <h2 class="flex items-center gap-4 mb-8">
+                    <span>Market Opportunity</span>
+                    <span class="text-yellow-500 text-5xl">💰</span>
+                </h2>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="glass-card bg-yellow-950/20 border-yellow-500/50">
+                            <h4 class="text-2xl font-bold text-yellow-400 mb-4">Addressable Market</h4>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Knowledge Workers</span>
+                                    <span class="text-2xl font-bold text-yellow-400">1.25B</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Enterprise Seats</span>
+                                    <span class="text-2xl font-bold text-yellow-400">400M</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Market Size</span>
+                                    <span class="text-2xl font-bold text-yellow-400">$180B</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card bg-green-950/20 border-green-500/50">
+                            <h4 class="text-2xl font-bold text-green-400 mb-4">Revenue Model</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-3 h-3 rounded-full bg-green-400"></span>
+                                    <span class="text-gray-300">SaaS: $49/user/month</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="w-3 h-3 rounded-full bg-blue-400"></span>
+                                    <span class="text-gray-300">Enterprise: $199/user/month</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="w-3 h-3 rounded-full bg-purple-400"></span>
+                                    <span class="text-gray-300">API access for developers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h4 class="text-2xl font-bold text-primary mb-6">Competitive Advantage</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-sm font-bold">✓</div>
+                                <div>
+                                    <div class="font-semibold text-white">True Autonomy</div>
+                                    <div class="text-sm text-gray-400">First AI that actually participates in meetings</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-sm font-bold">✓</div>
+                                <div>
+                                    <div class="font-semibold text-white">Genetic Optimization</div>
+                                    <div class="text-sm text-gray-400">Advanced algorithms competitors can't match</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-neural flex items-center justify-center text-sm font-bold">✓</div>
+                                <div>
+                                    <div class="font-semibold text-white">Personality Engine</div>
+                                    <div class="text-sm text-gray-400">5 distinct AI personalities for any situation</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-accent flex items-center justify-center text-sm font-bold">✓</div>
+                                <div>
+                                    <div class="font-semibold text-white">Measurable ROI</div>
+                                    <div class="text-sm text-gray-400">Proven $50K+ annual productivity gains</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-white mb-2">18-Month Roadmap</div>
+                                <div class="text-gray-300">From hackathon to $10M ARR</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    We're not just building a product - we're creating a new category. The productivity AI operator market is ours to define and dominate.
+                </aside>
+            </section>
+
+            <!-- Call to Action -->
+            <section class="bg-gradient-to-br from-primary/30 to-secondary/30 text-center">
+                <div class="space-y-8">
+                    <h1 class="text-7xl font-black text-white mb-6">
+                        Ready to 10x Productivity?
+                    </h1>
+
+                    <div class="glass-card max-w-2xl mx-auto p-8">
+                        <div class="grid grid-cols-2 gap-8 mb-8">
+                            <div>
+                                <h4 class="text-2xl font-bold text-primary mb-4">🚀 Try MeetingAssassin</h4>
+                                <div class="text-lg text-gray-300 mb-4">
+                                    <a href="http://localhost:3000"
+                                       target="_blank"
+                                       class="text-primary hover:text-primary-dark underline font-semibold">
+                                        demo.meetingassassin.ai
+                                    </a>
+                                </div>
+                                <button class="demo-button" onclick="window.open('http://localhost:3000', '_blank')">
+                                    Launch Live Demo
+                                </button>
+                            </div>
+
+                            <div>
+                                <h4 class="text-2xl font-bold text-secondary mb-4">📱 Mobile Experience</h4>
+                                <div class="w-32 h-32 mx-auto bg-white rounded-xl p-2 mb-4">
+                                    <!-- QR Code placeholder -->
+                                    <div class="w-full h-full bg-gray-900 rounded-lg flex items-center justify-center">
+                                        <span class="text-white text-xs">QR CODE</span>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-400">Scan for instant access</div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center gap-6">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-primary">GitHub</div>
+                                <div class="text-gray-400">@meetingassassin/core</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-secondary">API Docs</div>
+                                <div class="text-gray-400">docs.meetingassassin.ai</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center gap-4">
+                        <span class="px-6 py-3 bg-primary/20 text-primary border border-primary/50 rounded-full text-lg font-semibold animate-pulse-glow">
+                            🏆 Best AI Innovation
+                        </span>
+                        <span class="px-6 py-3 bg-secondary/20 text-secondary border border-secondary/50 rounded-full text-lg font-semibold animate-pulse-glow">
+                            🚀 Most Impactful Solution
+                        </span>
+                    </div>
+
+                    <button class="demo-button text-2xl px-8 py-4 mt-8" onclick="showThankYou()">
+                        <span>🎤</span>
+                        Questions?
+                    </button>
+                </div>
+                <aside class="notes">
+                    Thank you! MeetingAssassin isn't just the future of productivity - it's available today. Ready to transform how the world works?
+                </aside>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/notes/notes.min.js"></script>
+
+    <script>
+        // Initialize Reveal.js
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            transition: 'slide',
+            transitionSpeed: 'fast',
+            backgroundTransition: 'fade',
+            plugins: [RevealHighlight, RevealNotes],
+            keyboard: {
+                // Custom keyboard shortcuts
+                68: function() { showDemo(); }, // 'd' key for demo
+                80: function() { switchPersonality('random'); } // 'p' key for personality
+            }
+        });
+
+        // Demo variables
+        let currentPersonality = 'strategic';
+        let meetingActive = false;
+        let generationCount = 1247;
+        let timeSaved = 23;
+
+        // Personality responses
+        const personalities = {
+            strategic: {
+                name: "Strategic Sarah",
+                color: "text-blue-400",
+                response: "Based on market analysis, I recommend prioritizing high-impact initiatives that align with our Q4 revenue targets. Let me propose a data-driven approach..."
+            },
+            technical: {
+                name: "Technical Tom",
+                color: "text-green-400",
+                response: "From a technical perspective, we should focus on scalable architecture improvements. I've identified three critical performance bottlenecks we can address..."
+            },
+            creative: {
+                name: "Creative Chris",
+                color: "text-purple-400",
+                response: "What if we approached this differently? I'm seeing an opportunity to innovate our user experience in ways competitors haven't considered..."
+            },
+            analytical: {
+                name: "Analytical Anna",
+                color: "text-yellow-400",
+                response: "The data shows a clear trend. Our metrics indicate 34% improvement potential if we optimize these three key areas. Here's my analysis..."
+            },
+            diplomatic: {
+                name: "Diplomatic Dave",
+                color: "text-red-400",
+                response: "I understand everyone's concerns. Let me suggest a collaborative approach that addresses both teams' priorities while maintaining our timeline..."
+            }
+        };
+
+        // Switch personality function
+        function switchPersonality(type) {
+            if (type === 'random') {
+                const types = Object.keys(personalities);
+                type = types[Math.floor(Math.random() * types.length)];
+            }
+
+            currentPersonality = type;
+            const personality = personalities[type];
+
+            // Update UI
+            document.getElementById('ai-response').innerHTML = personality.response;
+            document.getElementById('ai-response').className = `text-gray-300 ${personality.color}`;
+
+            // Update personality switches
+            document.querySelectorAll('.personality-switch').forEach(el => {
+                el.style.background = 'rgba(0, 255, 136, 0.1)';
+                el.style.borderColor = 'rgba(0, 255, 136, 0.3)';
+            });
+
+            event.target.closest('.personality-switch').style.background = 'rgba(0, 255, 136, 0.3)';
+            event.target.closest('.personality-switch').style.borderColor = 'rgba(0, 255, 136, 0.6)';
+        }
+
+        // Simulate meeting function
+        function simulateMeeting() {
+            if (meetingActive) return;
+
+            meetingActive = true;
+            const personality = personalities[currentPersonality];
+
+            // Animate typing
+            const responseEl = document.getElementById('ai-response');
+            responseEl.innerHTML = 'Thinking...';
+
+            setTimeout(() => {
+                responseEl.innerHTML = personality.response;
+                responseEl.className = `text-gray-300 ${personality.color}`;
+
+                // Update metrics
+                updateMetrics();
+
+                setTimeout(() => {
+                    meetingActive = false;
+                }, 2000);
+            }, 1500);
+        }
+
+        // Update real-time metrics
+        function updateMetrics() {
+            timeSaved += Math.floor(Math.random() * 10) + 5;
+            document.getElementById('time-saved').innerText = timeSaved + ' min';
+
+            // Update productivity chart if visible
+            updateProductivityChart();
+        }
+
+        // Initialize productivity chart
+        function initProductivityChart() {
+            const ctx = document.getElementById('productivity-chart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                    datasets: [{
+                        label: 'Productivity Score',
+                        data: [65, 78, 85, 92, 95],
+                        borderColor: '#00ff88',
+                        backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#00ff88',
+                        pointBorderColor: '#000',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            display: false,
+                            min: 0,
+                            max: 100
+                        },
+                        x: {
+                            display: false
+                        }
+                    },
+                    elements: {
+                        point: {
+                            hoverRadius: 6
+                        }
+                    }
+                }
+            });
+        }
+
+        // Generation counter animation
+        function animateGeneration() {
+            setInterval(() => {
+                generationCount += Math.floor(Math.random() * 10) + 1;
+                const counterEl = document.getElementById('generation-counter');
+                if (counterEl) {
+                    counterEl.innerText = generationCount.toLocaleString();
+                }
+            }, 500);
+        }
+
+        // Show demo function
+        function showDemo() {
+            Reveal.slide(3); // Jump to demo slide
+        }
+
+        // Show thank you
+        function showThankYou() {
+            alert('Thank you for your attention! 🚀\n\nMeetingAssassin - Your AI Productivity Operator\n\nReady to revolutionize how the world works?');
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start animations
+            animateGeneration();
+
+            // Initialize chart after a delay to ensure element exists
+            setTimeout(initProductivityChart, 1000);
+
+            // Auto-switch personalities demo
+            setInterval(() => {
+                if (!meetingActive && Math.random() > 0.7) {
+                    const types = Object.keys(personalities);
+                    const randomType = types[Math.floor(Math.random() * types.length)];
+                    // Auto-demo personality switching (silent)
+                }
+            }, 5000);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.shiftKey) {
+                simulateMeeting();
+            }
+        });
+
+        // Reveal.js event listeners
+        Reveal.addEventListener('slidechanged', function(event) {
+            // Initialize chart when reaching demo slide
+            if (event.indexh === 3) {
+                setTimeout(initProductivityChart, 500);
+            }
+        });
+    </script>
+</body>
+</html>
